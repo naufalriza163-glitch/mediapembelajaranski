@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jejak Madinah – SKI Kelas 10 Bab 2</title>
+
+  <!-- Font: Playfair Display (judul) + Inter (isi) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+  /* =========================================================
+     JEJAK MADINAH – Tema naskah sejarah digital
+     Palet: gelap hijau-hitam, emas, coklat tua, hijau tua
+     ========================================================= */
+  :root {
+    --bg: #0f1a15;
+    --bg-2: #15241d;
+    --bg-3: #1c3026;
+    --green: #1f4d3a;
+    --brown: #4a3324;
+    --gold: #d4af37;
+    --gold-soft: #e6cf86;
+    --parchment: #f1e6c8;
+    --muted: #b9ae92;
+    --danger: #c0603f;
+    --ok: #6fb98a;
+    --radius: 14px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    color: var(--parchment);
+    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+      radial-gradient(1200px 500px at 50% -10%, rgba(212,175,55,.10), transparent 60%),
+      radial-gradient(800px 500px at 100% 100%, rgba(31,77,58,.35), transparent 60%),
+      var(--bg);
+  }
+
+  h1, h2, h3 { font-family: "Playfair Display", serif; color: var(--gold-soft); line-height: 1.25; }
+  main { flex: 1; }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(15,26,21,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(212,175,55,.35);
+  }
+  .header-inner {
+    max-width: 1150px; margin: 0 auto; padding: .8rem 1.2rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  .brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; }
+  .brand-mark { color: var(--gold); font-size: 1.6rem; }
+  .brand-name { font-family: "Playfair Display", serif; font-weight: 700; font-size: 1.35rem; color: var(--gold-soft); }
+
+  .main-nav { display: flex; gap: .25rem; flex-wrap: wrap; }
+  .nav-link {
+    background: none; border: none; cursor: pointer;
+    color: var(--parchment); font: 500 .92rem "Inter", sans-serif;
+    padding: .55rem .9rem; border-radius: 999px; transition: .25s;
+  }
+  .nav-link:hover { background: var(--bg-3); }
+  .nav-link.active { background: var(--gold); color: #2a1e0f; }
+
+  .menu-btn { display: none; background: none; border: 1px solid var(--gold); color: var(--gold); font-size: 1.3rem; border-radius: 8px; padding: .2rem .7rem; cursor: pointer; }
+
+  /* ---------- Halaman (SPA) + transisi halus ---------- */
+  .page { display: none; opacity: 0; transform: translateY(14px); }
+  .page.active { display: block; animation: pageIn .55s ease forwards; }
+  @keyframes pageIn { to { opacity: 1; transform: none; } }
+
+  .container { max-width: 1150px; margin: 0 auto; padding: 2.5rem 1.2rem 3rem; }
+  .container.narrow { max-width: 820px; }
+  .section-title { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: .4rem; }
+  .section-title::after { content: ""; display: block; width: 70px; height: 3px; background: var(--gold); margin-top: .6rem; border-radius: 3px; }
+  .section-desc { color: var(--muted); margin: 1rem 0 1.8rem; max-width: 720px; }
+  .note { color: var(--muted); font-size: .85rem; margin-top: 1.5rem; font-style: italic; }
+
+  /* ---------- Tombol ---------- */
+  .btn { font: 600 1rem "Inter", sans-serif; padding: .8rem 1.6rem; border-radius: 999px; border: 1px solid transparent; cursor: pointer; transition: .25s; }
+  .btn-gold { background: linear-gradient(135deg, #e6c65a, #b8912a); color: #2a1e0f; box-shadow: 0 6px 18px rgba(212,175,55,.3); }
+  .btn-gold:hover { transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--gold-soft); border-color: var(--gold); }
+  .btn-ghost:hover { background: var(--bg-3); }
+
+  /* ---------- Hero ---------- */
+  .hero { max-width: 900px; margin: 0 auto; padding: 5rem 1.2rem 4rem; text-align: center; }
+  .eyebrow { letter-spacing: .25em; text-transform: uppercase; font-size: .78rem; color: var(--gold); margin-bottom: 1.2rem; }
+  .hero h1 { font-size: clamp(2.1rem, 6vw, 3.8rem); font-weight: 800; }
+  .hero h1 em { font-style: italic; font-weight: 500; color: var(--parchment); font-size: .62em; display: inline-block; margin-top: .6rem; }
+  .hero-sub { color: var(--muted); margin: 1.6rem auto 2rem; max-width: 640px; font-size: 1.05rem; }
+  .hero-steps { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 3rem; }
+  .hero-steps div { display: flex; align-items: center; gap: .5rem; color: var(--muted); font-size: .9rem; }
+  .hero-steps b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--green); color: var(--gold-soft); font-size: .85rem; }
+
+  /* ---------- Kartu umum ---------- */
+  .card, .detail-card {
+    background: linear-gradient(160deg, var(--bg-2), #101c16);
+    border: 1px solid rgba(212,175,55,.25);
+    border-radius: var(--radius); padding: 1.6rem; box-shadow: var(--shadow);
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline-wrap { display: grid; grid-template-columns: 340px 1fr; gap: 2rem; align-items: start; }
+  .timeline { list-style: none; position: relative; padding-left: 1.6rem; }
+  .timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--gold), var(--green)); }
+  .timeline li { position: relative; margin-bottom: .8rem; }
+  .timeline li::before { content: ""; position: absolute; left: -1.6rem; top: 1rem; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 2px solid var(--gold); transition: .25s; }
+  .timeline li.active::before { background: var(--gold); box-shadow: 0 0 0 5px rgba(212,175,55,.2); }
+  .tl-btn { width: 100%; text-align: left; cursor: pointer; background: var(--bg-2); border: 1px solid rgba(212,175,55,.2); color: var(--parchment); border-radius: 10px; padding: .8rem 1rem; transition: .25s; font: 500 .95rem "Inter", sans-serif; }
+  .tl-btn small { display: block; color: var(--gold); font-size: .75rem; letter-spacing: .05em; }
+  .tl-btn:hover, li.active .tl-btn { background: var(--bg-3); border-color: var(--gold); }
+
+  .detail-card { position: sticky; top: 90px; animation: pageIn .4s ease; }
+  .detail-icon { font-size: 2.6rem; }
+  .detail-year { color: var(--gold); font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; margin-top: .3rem; }
+  .detail-card h3 { font-size: 1.6rem; margin: .3rem 0 .8rem; }
+  .point-list { margin-top: 1rem; padding-left: 1.2rem; color: var(--muted); }
+  .point-list li { margin-bottom: .4rem; }
+
+  /* ---------- Tab (simulasi & LKPD) ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; }
+  .tab { cursor: pointer; background: var(--bg-2); color: var(--parchment); border: 1px solid rgba(212,175,55,.3); padding: .55rem 1.1rem; border-radius: 999px; font: 500 .9rem "Inter", sans-serif; transition: .25s; }
+  .tab:hover { background: var(--bg-3); }
+  .tab.active { background: var(--gold); color: #2a1e0f; }
+
+  /* ---------- Simulasi ---------- */
+  .scenario-title { font-size: 1.5rem; margin-bottom: .6rem; }
+  .choices { display: grid; gap: .8rem; margin: 1.2rem 0; }
+  .choice { text-align: left; cursor: pointer; background: var(--bg); color: var(--parchment); border: 1px solid rgba(212,175,55,.3); border-radius: 10px; padding: .9rem 1.1rem; font: 400 .98rem "Inter", sans-serif; transition: .25s; }
+  .choice:hover:not(:disabled) { border-color: var(--gold); background: var(--bg-3); }
+  .choice:disabled { cursor: default; opacity: .6; }
+  .choice.picked { opacity: 1; border-color: var(--gold); }
+  .feedback { border-left: 4px solid var(--gold); background: rgba(212,175,55,.07); padding: 1rem 1.2rem; border-radius: 0 10px 10px 0; margin-top: 1rem; animation: pageIn .4s ease; }
+  .feedback.good { border-color: var(--ok); }
+  .feedback.bad { border-color: var(--danger); }
+  .feedback h4 { font-family: "Playfair Display", serif; margin-bottom: .3rem; }
+  .badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
+  .badge { background: var(--green); color: var(--gold-soft); padding: .2rem .8rem; border-radius: 999px; font-size: .8rem; }
+  .strategy { margin-top: 1rem; padding: 1rem 1.2rem; background: rgba(31,77,58,.35); border-radius: 10px; }
+
+  /* ---------- Piagam (kartu) ---------- */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+  .charter-card { cursor: pointer; text-align: left; background: linear-gradient(160deg, var(--bg-2), var(--brown)); border: 1px solid rgba(212,175,55,.3); border-radius: var(--radius); padding: 1.3rem; color: var(--parchment); transition: .3s; font-family: inherit; }
+  .charter-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+  .charter-card .icon { font-size: 1.8rem; }
+  .charter-card .pasal { color: var(--gold); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; margin-top: .4rem; }
+  .charter-card h3 { font-size: 1.15rem; margin: .2rem 0 .5rem; }
+  .charter-card .more { display: none; margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed rgba(212,175,55,.4); font-size: .93rem; }
+  .charter-card.open .more { display: block; animation: pageIn .35s ease; }
+  .charter-card .hint { color: var(--muted); font-size: .8rem; }
+  .charter-card.open .hint { display: none; }
+
+  /* ---------- LKPD ---------- */
+  .case-box { background: rgba(74,51,36,.45); border: 1px solid rgba(212,175,55,.25); padding: 1rem 1.2rem; border-radius: 10px; margin: .8rem 0 1.4rem; }
+  .q-label { display: block; font-weight: 600; margin: 1rem 0 .4rem; color: var(--gold-soft); }
+  textarea { width: 100%; min-height: 120px; resize: vertical; background: var(--bg); color: var(--parchment); border: 1px solid rgba(212,175,55,.35); border-radius: 10px; padding: .8rem 1rem; font: 400 .98rem "Inter", sans-serif; }
+  textarea:focus { outline: 2px solid var(--gold); }
+  .save-row { display: flex; align-items: center; gap: 1rem; margin-top: 1.2rem; flex-wrap: wrap; }
+  .save-msg { color: var(--ok); font-size: .9rem; }
+
+  /* ---------- Asesmen ---------- */
+  .q-card { background: var(--bg-2); border: 1px solid rgba(212,175,55,.25); border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; }
+  .q-card .q-text { font-weight: 500; margin-bottom: .8rem; }
+  .q-card .q-text b { color: var(--gold); margin-right: .3rem; }
+  .opt { display: flex; gap: .7rem; align-items: flex-start; padding: .55rem .8rem; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: .2s; }
+  .opt:hover { background: var(--bg-3); }
+  .opt input { margin-top: .45rem; accent-color: var(--gold); }
+  .opt.correct { background: rgba(111,185,138,.15); border-color: var(--ok); }
+  .opt.wrong { background: rgba(192,96,63,.15); border-color: var(--danger); }
+  .explain { margin-top: .8rem; font-size: .92rem; color: var(--muted); border-left: 3px solid var(--gold); padding-left: .9rem; }
+  .quiz-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
+  .result { margin-top: 2rem; text-align: center; background: linear-gradient(160deg, var(--green), var(--bg-2)); border: 1px solid var(--gold); border-radius: var(--radius); padding: 2rem 1.4rem; animation: pageIn .5s ease; }
+  .result .score { font-family: "Playfair Display", serif; font-size: 4rem; color: var(--gold-soft); line-height: 1; }
+  .result .stats { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+  .hidden { display: none; }
+
+  /* ---------- Footer ---------- */
+  .site-footer { text-align: center; padding: 1.5rem 1rem; color: var(--muted); font-size: .85rem; border-top: 1px solid rgba(212,175,55,.2); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px) {
+    .timeline-wrap { grid-template-columns: 1fr; }
+    .detail-card { position: static; }
+    .menu-btn { display: block; }
+    .main-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; background: var(--bg); padding: .8rem 1.2rem 1.2rem; border-bottom: 1px solid var(--gold); }
+    .main-nav.open { display: flex; }
+    .nav-link { text-align: left; }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER / NAVIGASI ================= -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#beranda" class="brand" data-nav="beranda">
+        <span class="brand-mark">☪</span>
+        <span class="brand-name">Jejak Madinah</span>
+      </a>
+
+      <button id="menuBtn" class="menu-btn" aria-label="Buka menu">☰</button>
+
+      <nav id="mainNav" class="main-nav">
+        <button class="nav-link active" data-nav="beranda">Beranda</button>
+        <button class="nav-link" data-nav="timeline">Timeline</button>
+        <button class="nav-link" data-nav="simulasi">Simulasi Keputusan</button>
+        <button class="nav-link" data-nav="piagam">Piagam Madinah</button>
+        <button class="nav-link" data-nav="lkpd">LKPD Digital</button>
+        <button class="nav-link" data-nav="asesmen">Asesmen</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ================= 1. BERANDA ================= -->
+    <section id="beranda" class="page active">
+      <div class="hero">
+        <p class="eyebrow">SKI Kelas 10 · Bab 2 · Periode Madinah</p>
+        <h1>Jejak Madinah:<br /><em>Membangun Masyarakat dari Konflik menjadi Ukhuwah</em></h1>
+        <p class="hero-sub">
+          Telusuri bagaimana Rasulullah saw. mengubah Yatsrib yang terpecah oleh
+          konflik kesukuan menjadi Madinah, masyarakat yang beradab, adil, dan
+          bersaudara melalui hijrah, masjid, persaudaraan, dan Piagam Madinah.
+        </p>
+        <button class="btn btn-gold" data-nav="timeline">Mulai Belajar</button>
+
+        <div class="hero-steps">
+          <div><b>1</b><span>Timeline</span></div>
+          <div><b>2</b><span>Simulasi</span></div>
+          <div><b>3</b><span>Piagam</span></div>
+          <div><b>4</b><span>LKPD</span></div>
+          <div><b>5</b><span>Asesmen</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2. TIMELINE ================= -->
+    <section id="timeline" class="page">
+      <div class="container">
+        <h2 class="section-title">Timeline Yatsrib → Madinah</h2>
+        <p class="section-desc">Klik setiap titik untuk membaca penjelasannya.</p>
+
+        <div class="timeline-wrap">
+          <ol id="timelineList" class="timeline"></ol>
+
+          <article id="timelineDetail" class="detail-card">
+            <div class="detail-icon" id="tlIcon">📜</div>
+            <p class="detail-year" id="tlYear"></p>
+            <h3 id="tlTitle"></h3>
+            <p id="tlText"></p>
+            <ul id="tlPoints" class="point-list"></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3. SIMULASI KEPUTUSAN ================= -->
+    <section id="simulasi" class="page">
+      <div class="container">
+        <h2 class="section-title">Simulasi Keputusan</h2>
+        <p class="section-desc">
+          Bayangkan kamu menjadi pemimpin. Pilih keputusan terbaik, lalu lihat
+          konsekuensinya dan strategi Rasulullah saw.
+        </p>
+        <div id="simTabs" class="tabs"></div>
+        <div id="simBody" class="card"></div>
+      </div>
+    </section>
+
+    <!-- ================= 4. PIAGAM MADINAH ================= -->
+    <section id="piagam" class="page">
+      <div class="container">
+        <h2 class="section-title">Piagam Madinah</h2>
+        <p class="section-desc">
+          Konstitusi tertulis pertama yang mengatur kehidupan bersama masyarakat
+          majemuk. Klik kartu untuk melihat makna dan nilainya.
+        </p>
+        <div id="piagamGrid" class="card-grid"></div>
+        <p class="note">Catatan: nomor pasal dapat berbeda antarterjemahan/sumber. Rujuk buku paket untuk nomor yang dipakai di kelas.</p>
+      </div>
+    </section>
+
+    <!-- ================= 5. LKPD DIGITAL ================= -->
+    <section id="lkpd" class="page">
+      <div class="container">
+        <h2 class="section-title">LKPD Digital</h2>
+        <p class="section-desc">
+          Pilih kelompokmu, baca studi kasus, lalu tulis jawaban. Jawaban
+          tersimpan di perangkat ini (localStorage).
+        </p>
+        <div id="lkpdTabs" class="tabs"></div>
+        <div id="lkpdBody" class="card"></div>
+      </div>
+    </section>
+
+    <!-- ================= 6. ASESMEN ================= -->
+    <section id="asesmen" class="page">
+      <div class="container narrow">
+        <h2 class="section-title">Asesmen Sumatif</h2>
+        <p class="section-desc">10 soal pilihan ganda. Jawab semua soal, lalu tekan “Selesai”.</p>
+        <form id="quizForm" class="quiz"></form>
+        <div class="quiz-actions">
+          <button id="finishBtn" class="btn btn-gold" type="button">Selesai</button>
+          <button id="resetQuizBtn" class="btn btn-ghost" type="button">Ulangi</button>
+        </div>
+        <div id="quizResult" class="result hidden"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    Jejak Madinah · Media Pembelajaran SKI Kelas 10 · Bab 2 Periode Madinah
+  </footer>
+
+  <script>
+  /* =========================================================
+     BAGIAN A – DATA (materi & soal). Edit teks di bagian ini.
+     ========================================================= */
+
+  /* ---------- 1. DATA TIMELINE ---------- */
+  const TIMELINE = [
+    {
+      year: "Sebelum 622 M", icon: "🏜️", title: "Yatsrib sebelum Islam",
+      text: "Yatsrib adalah oase subur di utara Makkah. Penduduknya terdiri dari suku Arab Aus dan Khazraj serta beberapa kabilah Yahudi. Tidak ada pemerintahan tunggal yang mengikat semua kelompok.",
+      points: [
+        "Suku Aus dan Khazraj berasal dari Arab selatan dan menetap di Yatsrib.",
+        "Komunitas Yahudi seperti Bani Qainuqa', Bani Nadhir, dan Bani Quraizhah menguasai sebagian pertanian dan perdagangan.",
+        "Masyarakat terikat fanatisme kesukuan (ashabiyah), bukan hukum bersama."
+      ]
+    },
+    {
+      year: "Sebelum 622 M", icon: "⚔️", title: "Konflik dan ketidakstabilan",
+      text: "Persaingan Aus dan Khazraj berlangsung lama dan sering berujung perang. Puncaknya adalah Perang Bu'ats. Kelompok Yahudi kerap dimanfaatkan atau ikut terseret dalam aliansi.",
+      points: [
+        "Perang Bu'ats adalah pertempuran besar antara Aus dan Khazraj beberapa tahun sebelum hijrah.",
+        "Konflik menimbulkan kelelahan, dendam, dan korban di kedua pihak.",
+        "Masyarakat membutuhkan pemimpin adil yang diterima semua pihak."
+      ]
+    },
+    {
+      year: "622 M / 1 H", icon: "🐪", title: "Hijrah Rasulullah saw.",
+      text: "Setelah Baiat Aqabah I dan II, sejumlah penduduk Yatsrib menyatakan iman dan mengundang Nabi. Rasulullah saw. hijrah dari Makkah bersama Abu Bakar r.a., singgah di Quba, lalu tiba di Yatsrib yang kemudian bernama Madinah.",
+      points: [
+        "Baiat Aqabah menjadi jembatan diplomasi dakwah ke Yatsrib.",
+        "Di Quba, Rasulullah saw. membangun Masjid Quba, masjid pertama dalam Islam.",
+        "Penduduk menyambut dengan gembira; Yatsrib berganti nama menjadi Madinatur Rasul (Madinah)."
+      ]
+    },
+    {
+      year: "1 H", icon: "🕌", title: "Pendirian Masjid Nabawi",
+      text: "Langkah pertama Rasulullah saw. di Madinah adalah membangun masjid. Masjid Nabawi bukan hanya tempat shalat, tetapi pusat pembinaan umat.",
+      points: [
+        "Tanah dibeli dari dua anak yatim, Sahl dan Suhail.",
+        "Fungsi masjid: ibadah, pendidikan, musyawarah, pengadilan, dan kegiatan sosial.",
+        "Ahlus Shuffah, para sahabat yang belajar dan tinggal di masjid, menjadi cikal bakal pendidikan Islam."
+      ]
+    },
+    {
+      year: "1 H", icon: "🤝", title: "Persaudaraan Muhajirin–Anshar",
+      text: "Rasulullah saw. mempersaudarakan kaum Muhajirin (pendatang dari Makkah) dengan kaum Anshar (penolong dari Madinah) agar tercipta solidaritas dan kemandirian ekonomi.",
+      points: [
+        "Kaum Anshar berbagi rumah dan harta dengan saudara Muhajirin mereka.",
+        "Contoh: Abdurrahman bin Auf menolak tawaran harta Sa'ad bin Rabi' dan meminta ditunjukkan pasar untuk berdagang.",
+        "Ikatan iman menggantikan fanatisme kesukuan."
+      ]
+    },
+    {
+      year: "1 H", icon: "📜", title: "Penyusunan Piagam Madinah",
+      text: "Rasulullah saw. menyusun kesepakatan tertulis yang mengatur hak dan kewajiban seluruh warga Madinah: Muslim (Muhajirin dan Anshar), Yahudi, dan kelompok lain.",
+      points: [
+        "Menjadi landasan hidup bersama masyarakat majemuk.",
+        "Menjamin kebebasan beragama, keamanan bersama, dan penyelesaian sengketa.",
+        "Menegaskan Rasulullah saw. sebagai pemimpin dan penengah."
+      ]
+    }
+  ];
+
+  /* ---------- 2. DATA SIMULASI KEPUTUSAN ---------- */
+  /* type: "good" | "mid" | "bad" */
+  const SCENARIOS = [
+    {
+      id: "aus-khazraj", tab: "Aus vs Khazraj", title: "Konflik Aus vs Khazraj",
+      story: "Kamu tiba di Madinah. Aus dan Khazraj masih saling curiga dan dendam lama belum padam. Sebagian orang menyulut permusuhan lagi. Apa keputusanmu?",
+      choices: [
+        { text: "Memihak salah satu suku agar segera ada pihak yang kuat.", type: "bad",
+          result: "Suku yang tidak dipihak merasa terancam dan dendam lama menyala kembali. Persatuan gagal terbentuk." },
+        { text: "Mengumpulkan kedua suku, mengingatkan nikmat persaudaraan dalam iman, dan menetapkan aturan bersama.", type: "good",
+          result: "Kedua suku merasa dihargai. Ikatan iman menggantikan fanatisme suku dan konflik mereda." },
+        { text: "Membiarkan mereka menyelesaikan urusan sendiri.", type: "mid",
+          result: "Konflik tidak selesai dan mudah meletus lagi. Pemimpin perlu hadir sebagai penengah." }
+      ],
+      strategy: "Rasulullah saw. mempersatukan Aus dan Khazraj di atas ikatan iman (ukhuwah islamiyah) dan menempatkan diri sebagai penengah yang adil bagi semua. Ini tampak dalam Piagam Madinah dan pembinaan di Masjid Nabawi.",
+      values: ["Ukhuwah", "Keadilan", "Moderasi"]
+    },
+    {
+      id: "muhajirin", tab: "Kedatangan Muhajirin", title: "Kedatangan Muhajirin",
+      story: "Ratusan Muhajirin tiba dari Makkah tanpa harta karena ditinggalkan demi iman. Penduduk Madinah harus menampung mereka. Apa langkahmu?",
+      choices: [
+        { text: "Menyuruh Muhajirin mencari tempat tinggal sendiri di luar kota.", type: "bad",
+          result: "Muhajirin terlantar, kesenjangan melebar, dan solidaritas umat melemah." },
+        { text: "Mempersaudarakan Muhajirin dengan Anshar, sambil mendorong Muhajirin tetap berusaha mandiri.", type: "good",
+          result: "Anshar berbagi dengan tulus, Muhajirin bekerja dan berdagang. Ekonomi bergerak dan rasa persaudaraan kuat." },
+        { text: "Membagikan bantuan terus-menerus tanpa mendorong usaha.", type: "mid",
+          result: "Kebutuhan mendesak terpenuhi, tetapi ketergantungan tumbuh dan beban Anshar berat." }
+      ],
+      strategy: "Rasulullah saw. mempersaudarakan Muhajirin dan Anshar. Anshar berbagi tanpa pamrih, sementara Muhajirin didorong mandiri seperti Abdurrahman bin Auf yang memilih berdagang di pasar.",
+      values: ["Ukhuwah", "Kepedulian", "Kemandirian"]
+    },
+    {
+      id: "keberagaman", tab: "Masyarakat Beragam", title: "Keberagaman Masyarakat",
+      story: "Madinah dihuni Muslim, Yahudi, dan kelompok lain. Ada yang mengusulkan agar semua orang dipaksa memeluk satu agama. Apa keputusanmu?",
+      choices: [
+        { text: "Memaksa seluruh warga masuk Islam agar seragam.", type: "bad",
+          result: "Muncul ketakutan dan perlawanan. Kepercayaan hilang dan kota tidak damai. Ini bertentangan dengan prinsip tidak ada paksaan dalam agama." },
+        { text: "Menyusun kesepakatan tertulis: kebebasan beragama, hak dan kewajiban sama, dan pertahanan bersama.", type: "good",
+          result: "Semua kelompok merasa aman dan terlindungi. Madinah stabil dan menjadi contoh masyarakat majemuk." },
+        { text: "Membiarkan tiap kelompok hidup terpisah tanpa aturan bersama.", type: "mid",
+          result: "Tidak ada konflik terbuka, tetapi tidak ada mekanisme menyelesaikan sengketa dan menghadapi ancaman bersama." }
+      ],
+      strategy: "Rasulullah saw. menyusun Piagam Madinah yang mengakui hak semua warga, menjamin kebebasan beragama, dan mewajibkan kerja sama menghadapi ancaman. Inilah teladan moderasi dan toleransi.",
+      values: ["Toleransi", "Moderasi", "Inklusivitas"]
+    }
+  ];
+
+  /* ---------- 3. DATA PIAGAM MADINAH ---------- */
+  const PIAGAM = [
+    { icon: "🌍", pasal: "Pasal 1", title: "Satu komunitas (ummah)",
+      isi: "Kaum Mukminin dan seluruh pihak yang terikat perjanjian menjadi satu umat/komunitas politik, berbeda dari orang lain.",
+      makna: "Identitas bersama menggantikan sekat-sekat suku. Semua warga punya tanggung jawab yang sama terhadap Madinah.",
+      nilai: ["Persatuan", "Inklusivitas"] },
+    { icon: "🕊️", pasal: "Pasal 25", title: "Kebebasan beragama dijamin",
+      isi: "Kaum Yahudi memiliki agama mereka dan kaum Muslim memiliki agama mereka.",
+      makna: "Setiap kelompok bebas menjalankan keyakinannya tanpa paksaan, sejalan dengan prinsip tidak ada paksaan dalam agama.",
+      nilai: ["Toleransi", "Moderasi"] },
+    { icon: "🛡️", pasal: "Pasal 37", title: "Saling membantu saat ada serangan",
+      isi: "Para pihak wajib saling menolong menghadapi pihak yang memerangi peserta perjanjian ini.",
+      makna: "Keamanan adalah tanggung jawab bersama. Pertahanan Madinah tidak dibebankan pada satu kelompok saja.",
+      nilai: ["Solidaritas", "Tanggung jawab bersama"] },
+    { icon: "⚖️", pasal: "Pasal 42", title: "Perselisihan diselesaikan melalui Rasulullah saw.",
+      isi: "Bila terjadi perselisihan yang dikhawatirkan menimbulkan kerusakan, penyelesaiannya dikembalikan kepada Allah dan Muhammad saw.",
+      makna: "Ada satu otoritas yang adil sehingga sengketa tidak diselesaikan dengan balas dendam antar suku.",
+      nilai: ["Keadilan", "Supremasi hukum"] },
+    { icon: "🌴", pasal: "Pasal 39", title: "Madinah adalah kawasan yang dilindungi",
+      isi: "Lembah Yatsrib adalah tanah haram (terlindungi) bagi seluruh pihak yang menyepakati piagam ini.",
+      makna: "Wilayah Madinah harus aman dari kekerasan. Kota menjadi ruang aman bagi semua warganya.",
+      nilai: ["Keamanan", "Perdamaian"] }
+  ];
+
+  /* ---------- 4. DATA LKPD ---------- */
+  const LKPD = [
+    { id: "k1", tab: "Kelompok 1", title: "Konflik Aus dan Khazraj",
+      kasus: "Di sebuah kampung, dua kelompok pemuda saling bermusuhan sejak lama karena persoalan warisan leluhur. Setiap ada kegiatan bersama, keduanya saling ejek dan hampir berkelahi. Situasi ini mirip kondisi Aus dan Khazraj sebelum Islam.",
+      soal: [
+        "Jelaskan penyebab konflik Aus dan Khazraj serta dampaknya bagi masyarakat Yatsrib!",
+        "Bagaimana cara Rasulullah saw. mempersatukan Aus dan Khazraj, dan apa pelajaran untuk menyelesaikan konflik di sekitarmu?"
+      ] },
+    { id: "k2", tab: "Kelompok 2", title: "Muhajirin dan Anshar",
+      kasus: "Seorang siswa pindahan dari luar kota tidak punya teman dan kesulitan biaya. Teman-teman sekelas bergotong royong membantunya. Kisah ini serupa persaudaraan Muhajirin dan Anshar.",
+      soal: [
+        "Jelaskan bentuk persaudaraan Muhajirin dan Anshar serta contoh nyatanya!",
+        "Nilai apa yang dapat kamu teladani dari kisah Abdurrahman bin Auf dan Sa'ad bin Rabi', dan bagaimana menerapkannya di sekolah?"
+      ] },
+    { id: "k3", tab: "Kelompok 3", title: "Masyarakat yang Beragam",
+      kasus: "Di sebuah desa, warga berbeda agama dan suku hidup berdampingan. Ada isu ajakan menjauhi tetangga yang berbeda keyakinan. Warga bingung menyikapinya. Bandingkan dengan keberagaman Madinah pada masa Rasulullah saw.",
+      soal: [
+        "Bagaimana Rasulullah saw. memperlakukan warga non-Muslim di Madinah menurut Piagam Madinah?",
+        "Bagaimana sikap moderat dan toleran yang tepat menghadapi isu tersebut? Berikan alasannya!"
+      ] },
+    { id: "k4", tab: "Kelompok 4", title: "Membangun Masyarakat Madinah",
+      kasus: "Sebuah komunitas baru ingin menata kehidupan bersama. Mereka berdiskusi tentang tempat pusat kegiatan, cara mempererat warga, dan aturan yang disepakati. Pelajari langkah Rasulullah saw. di Madinah sebagai rujukan.",
+      soal: [
+        "Sebutkan dan jelaskan langkah-langkah Rasulullah saw. membangun masyarakat Madinah (masjid, persaudaraan, Piagam)!",
+        "Menurutmu, langkah mana yang paling relevan untuk membangun kerukunan di lingkunganmu? Jelaskan!"
+      ] }
+  ];
+
+  /* ---------- 5. DATA ASESMEN (10 PG) ---------- */
+  /* answer = indeks jawaban benar (0 = A, 1 = B, 2 = C, 3 = D) */
+  const QUIZ = [
+    { q: "Sebelum Islam datang, penduduk Yatsrib terdiri dari suku Arab yang saling bersaing, yaitu ...",
+      options: ["Quraisy dan Tsaqif", "Aus dan Khazraj", "Ghifar dan Aslam", "Bani Hasyim dan Bani Umayyah"],
+      answer: 1,
+      explain: "Penduduk Arab Yatsrib terdiri dari suku Aus dan Khazraj yang sering berkonflik, berdampingan dengan kabilah Yahudi." },
+    { q: "Peristiwa besar yang menunjukkan puncak konflik antara Aus dan Khazraj adalah ...",
+      options: ["Perang Badar", "Perang Uhud", "Perang Bu'ats", "Perang Khandaq"],
+      answer: 2,
+      explain: "Perang Bu'ats adalah perang besar antara Aus dan Khazraj sebelum hijrah. Perang Badar, Uhud, dan Khandaq terjadi setelah Nabi di Madinah." },
+    { q: "Penduduk Yatsrib mengundang Rasulullah saw. ke Madinah terutama karena mereka ...",
+      options: ["Ingin menguasai perdagangan Makkah", "Membutuhkan pemimpin adil yang dapat mendamaikan mereka", "Ingin membentuk pasukan perang", "Ingin pindah ke Makkah"],
+      answer: 1,
+      explain: "Setelah konflik panjang, mereka membutuhkan pemimpin adil yang diterima semua pihak, dan menemukannya pada Rasulullah saw." },
+    { q: "Masjid pertama yang dibangun Rasulullah saw. ketika hijrah, yaitu di tengah perjalanan menuju Madinah, adalah ...",
+      options: ["Masjid Nabawi", "Masjidil Aqsa", "Masjid Quba", "Masjid Qiblatain"],
+      answer: 2,
+      explain: "Rasulullah saw. singgah di Quba dan membangun Masjid Quba, masjid pertama dalam Islam. Setelah tiba di Madinah, beliau membangun Masjid Nabawi." },
+    { q: "Selain sebagai tempat shalat, Masjid Nabawi pada masa Rasulullah saw. berfungsi sebagai ...",
+      options: ["Benteng militer saja", "Pusat ibadah, pendidikan, musyawarah, dan kegiatan sosial", "Pasar utama", "Tempat penyimpanan harta perang saja"],
+      answer: 1,
+      explain: "Masjid Nabawi menjadi pusat pembinaan umat: ibadah, pendidikan (Ahlus Shuffah), musyawarah, dan kegiatan sosial." },
+    { q: "Kaum Anshar adalah ...",
+      options: ["Penduduk Makkah yang memusuhi Nabi", "Penduduk Madinah yang menolong kaum Muhajirin", "Kaum Yahudi Bani Nadhir", "Para pedagang dari Syam"],
+      answer: 1,
+      explain: "Anshar berarti penolong, yaitu penduduk Madinah dari Aus dan Khazraj yang menolong Nabi dan kaum Muhajirin." },
+    { q: "Tujuan utama Rasulullah saw. mempersaudarakan Muhajirin dan Anshar adalah ...",
+      options: ["Membagi wilayah kekuasaan", "Memperkuat solidaritas dan membantu Muhajirin yang kehilangan harta", "Membentuk dua kelompok yang bersaing", "Menghapuskan seluruh perdagangan"],
+      answer: 1,
+      explain: "Persaudaraan itu memperkuat solidaritas dan membantu Muhajirin yang meninggalkan harta di Makkah, sekaligus menghapus fanatisme kesukuan." },
+    { q: "Salah satu isi pokok Piagam Madinah adalah ...",
+      options: ["Hanya Muslim yang boleh tinggal di Madinah", "Kebebasan beragama dijamin bagi seluruh warga", "Suku Quraisy menjadi pemimpin mutlak", "Pajak dibebankan hanya pada kaum Yahudi"],
+      answer: 1,
+      explain: "Piagam Madinah menjamin kebebasan beragama, termasuk bagi kaum Yahudi, dengan hak dan kewajiban yang jelas." },
+    { q: "Menurut Piagam Madinah, apabila Madinah diserang pihak luar maka ...",
+      options: ["Tiap suku mempertahankan diri sendiri", "Seluruh pihak peserta piagam wajib saling membantu", "Hanya kaum Muslim yang wajib membela", "Warga dibolehkan mengungsi tanpa tanggung jawab"],
+      answer: 1,
+      explain: "Salah satu prinsip Piagam Madinah adalah kewajiban saling membantu mempertahankan Madinah dari serangan." },
+    { q: "Strategi dakwah Rasulullah saw. pada periode Madinah yang tepat adalah ...",
+      options: ["Memaksa seluruh penduduk masuk Islam", "Membangun masjid, mempersaudarakan umat, dan membuat perjanjian damai", "Menghindari interaksi dengan non-Muslim", "Mengandalkan kekuatan militer semata"],
+      answer: 1,
+      explain: "Dakwah Madinah dilakukan dengan membangun masjid, persaudaraan, dan Piagam Madinah, dengan prinsip tidak ada paksaan dalam agama." }
+  ];
+
+
+  /* =========================================================
+     BAGIAN B – LOGIKA INTERAKTIF
+     ========================================================= */
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+
+  /* ---------- 1. NAVIGASI SPA ---------- */
+  function showPage(id) {
+    $$(".page").forEach(p => p.classList.remove("active"));
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.classList.add("active");
+    $$(".nav-link").forEach(b => b.classList.toggle("active", b.dataset.nav === id));
+    $("#mainNav").classList.remove("open");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-nav]");
+    if (el) { e.preventDefault(); showPage(el.dataset.nav); }
+  });
+  $("#menuBtn").addEventListener("click", () => $("#mainNav").classList.toggle("open"));
+
+  /* ---------- 2. TIMELINE ---------- */
+  function initTimeline() {
+    const list = $("#timelineList");
+    TIMELINE.forEach((item, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<button class="tl-btn"><small>${item.year}</small>${item.title}</button>`;
+      li.querySelector("button").addEventListener("click", () => selectTimeline(i));
+      list.appendChild(li);
+    });
+    selectTimeline(0);
+  }
+  function selectTimeline(i) {
+    const item = TIMELINE[i];
+    $$("#timelineList li").forEach((li, idx) => li.classList.toggle("active", idx === i));
+    const card = $("#timelineDetail");
+    card.style.animation = "none"; card.offsetHeight; card.style.animation = "";
+    $("#tlIcon").textContent = item.icon;
+    $("#tlYear").textContent = item.year;
+    $("#tlTitle").textContent = item.title;
+    $("#tlText").textContent = item.text;
+    $("#tlPoints").innerHTML = item.points.map(p => `<li>${p}</li>`).join("");
+  }
+
+  /* ---------- 3. SIMULASI KEPUTUSAN ---------- */
+  let currentScenario = 0;
+  function initSimulation() {
+    const tabs = $("#simTabs");
+    SCENARIOS.forEach((s, i) => {
+      const b = document.createElement("button");
+      b.className = "tab"; b.textContent = s.tab;
+      b.addEventListener("click", () => renderScenario(i));
+      tabs.appendChild(b);
+    });
+    renderScenario(0);
+  }
+  function renderScenario(i) {
+    currentScenario = i;
+    const s = SCENARIOS[i];
+    $$("#simTabs .tab").forEach((t, idx) => t.classList.toggle("active", idx === i));
+    $("#simBody").innerHTML = `
+      <h3 class="scenario-title">${s.title}</h3>
+      <p>${s.story}</p>
+      <div class="choices">
+        ${s.choices.map((c, ci) => `<button class="choice" data-i="${ci}">${String.fromCharCode(65 + ci)}. ${c.text}</button>`).join("")}
+      </div>
+      <div id="simFeedback"></div>`;
+    $$("#simBody .choice").forEach(btn =>
+      btn.addEventListener("click", () => chooseOption(s, +btn.dataset.i, btn))
+    );
+  }
+  function chooseOption(s, ci, btn) {
+    const c = s.choices[ci];
+    $$("#simBody .choice").forEach(b => (b.disabled = true));
+    btn.classList.add("picked");
+    const label = { good: "Keputusan tepat ✔", mid: "Kurang optimal", bad: "Keputusan kurang tepat ✘" }[c.type];
+    $("#simFeedback").innerHTML = `
+      <div class="feedback ${c.type === "good" ? "good" : c.type === "bad" ? "bad" : ""}">
+        <h4>${label}</h4>
+        <p><b>Konsekuensi:</b> ${c.result}</p>
+      </div>
+      <div class="strategy">
+        <b>Strategi Rasulullah saw.</b>
+        <p>${s.strategy}</p>
+        <div class="badges">${s.values.map(v => `<span class="badge">${v}</span>`).join("")}</div>
+      </div>
+      <div class="save-row">
+        <button class="btn btn-ghost" id="retryBtn">Coba pilihan lain</button>
+        ${currentScenario < SCENARIOS.length - 1 ? `<button class="btn btn-gold" id="nextBtn">Skenario berikutnya →</button>` : ""}
+      </div>`;
+    $("#retryBtn").addEventListener("click", () => renderScenario(currentScenario));
+    const next = $("#nextBtn");
+    if (next) next.addEventListener("click", () => renderScenario(currentScenario + 1));
+  }
+
+  /* ---------- 4. PIAGAM MADINAH ---------- */
+  function initCharter() {
+    const grid = $("#piagamGrid");
+    PIAGAM.forEach(p => {
+      const card = document.createElement("button");
+      card.className = "charter-card";
+      card.innerHTML = `
+        <div class="icon">${p.icon}</div>
+        <div class="pasal">${p.pasal}</div>
+        <h3>${p.title}</h3>
+        <p>${p.isi}</p>
+        <span class="hint">Klik untuk melihat makna ▾</span>
+        <div class="more">
+          <p><b>Makna:</b> ${p.makna}</p>
+          <div class="badges">${p.nilai.map(n => `<span class="badge">${n}</span>`).join("")}</div>
+        </div>`;
+      card.addEventListener("click", () => card.classList.toggle("open"));
+      grid.appendChild(card);
+    });
+  }
+
+  /* ---------- 5. LKPD DIGITAL (localStorage) ---------- */
+  const LKPD_KEY = "jejakMadinah_lkpd";
+  function loadLkpdData() {
+    try { return JSON.parse(localStorage.getItem(LKPD_KEY)) || {}; }
+    catch { return {}; }
+  }
+  function initLkpd() {
+    const tabs = $("#lkpdTabs");
+    LKPD.forEach((g, i) => {
+      const b = document.createElement("button");
+      b.className = "tab"; b.textContent = g.tab;
+      b.addEventListener("click", () => renderLkpd(i));
+      tabs.appendChild(b);
+    });
+    renderLkpd(0);
+  }
+  function renderLkpd(i) {
+    const g = LKPD[i];
+    const saved = loadLkpdData()[g.id] || {};
+    $$("#lkpdTabs .tab").forEach((t, idx) => t.classList.toggle("active", idx === i));
+    $("#lkpdBody").innerHTML = `
+      <h3>${g.tab}: ${g.title}</h3>
+      <div class="case-box"><b>Studi Kasus</b><p>${g.kasus}</p></div>
+      ${g.soal.map((q, qi) => `
+        <label class="q-label" for="ans-${qi}">${qi + 1}. ${q}</label>
+        <textarea id="ans-${qi}" placeholder="Tulis jawabanmu di sini...">${saved[qi] || ""}</textarea>
+      `).join("")}
+      <div class="save-row">
+        <button class="btn btn-gold" id="saveBtn">Simpan Jawaban</button>
+        <span class="save-msg" id="saveMsg"></span>
+      </div>`;
+    $("#saveBtn").addEventListener("click", () => {
+      const all = loadLkpdData();
+      all[g.id] = {};
+      g.soal.forEach((_, qi) => (all[g.id][qi] = $(`#ans-${qi}`).value));
+      localStorage.setItem(LKPD_KEY, JSON.stringify(all));
+      $("#saveMsg").textContent = "✔ Jawaban tersimpan di perangkat ini.";
+      setTimeout(() => ($("#saveMsg").textContent = ""), 3000);
+    });
+  }
+
+  /* ---------- 6. ASESMEN SUMATIF ---------- */
+  function initQuiz() {
+    const form = $("#quizForm");
+    form.innerHTML = QUIZ.map((item, qi) => `
+      <div class="q-card" data-q="${qi}">
+        <p class="q-text"><b>${qi + 1}.</b> ${item.q}</p>
+        ${item.options.map((o, oi) => `
+          <label class="opt">
+            <input type="radio" name="q${qi}" value="${oi}" />
+            <span>${String.fromCharCode(65 + oi)}. ${o}</span>
+          </label>`).join("")}
+        <div class="explain hidden"></div>
+      </div>`).join("");
+    $("#finishBtn").onclick = finishQuiz;
+    $("#resetQuizBtn").onclick = () => {
+      initQuiz();
+      $("#quizResult").classList.add("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  }
+  function finishQuiz() {
+    const unanswered = QUIZ.filter((_, qi) => !$(`input[name="q${qi}"]:checked`)).length;
+    if (unanswered > 0 && !confirm(`Masih ada ${unanswered} soal yang belum dijawab. Tetap selesai?`)) return;
+
+    let correct = 0;
+    QUIZ.forEach((item, qi) => {
+      const card = $(`.q-card[data-q="${qi}"]`);
+      const chosen = $(`input[name="q${qi}"]:checked`);
+      const chosenIdx = chosen ? +chosen.value : -1;
+      const opts = $$(".opt", card);
+
+      opts[item.answer].classList.add("correct");
+      if (chosenIdx !== -1 && chosenIdx !== item.answer) opts[chosenIdx].classList.add("wrong");
+      if (chosenIdx === item.answer) correct++;
+
+      const ex = $(".explain", card);
+      ex.innerHTML = `<b>Pembahasan:</b> ${item.explain}`;
+      ex.classList.remove("hidden");
+      $$("input", card).forEach(inp => (inp.disabled = true));
+    });
+
+    const total = QUIZ.length;
+    const wrong = total - correct;
+    const percent = Math.round((correct / total) * 100);
+    const nilai = correct * 10;
+
+    const res = $("#quizResult");
+    res.innerHTML = `
+      <p>Skor Akhir</p>
+      <div class="score">${nilai}</div>
+      <p>${percent}%</p>
+      <div class="stats">
+        <span>✔ Benar: <b>${correct}</b></span>
+        <span>✘ Salah: <b>${wrong}</b></span>
+      </div>
+      <p style="margin-top:1rem;color:var(--muted)">
+        ${percent >= 80 ? "Luar biasa! Pemahamanmu sangat baik." : percent >= 60 ? "Bagus! Pelajari lagi pembahasan agar lebih mantap." : "Ayo ulangi materi Timeline dan Piagam Madinah, lalu coba lagi."}
+      </p>`;
+    res.classList.remove("hidden");
+    res.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  /* ---------- INISIALISASI ---------- */
+  document.addEventListener("DOMContentLoaded", () => {
+    initTimeline();
+    initSimulation();
+    initCharter();
+    initLkpd();
+    initQuiz();
+  });
+  </script>
+</body>
+</html>
